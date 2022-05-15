@@ -3,7 +3,10 @@ import pandas as pd
 import re
 from PIL import Image
 from PIL import ImageFont
-from PIL import ImageDraw 
+from PIL import ImageDraw
+from pathlib import Path
+
+Path("./captioned_images").mkdir(parents=True, exist_ok=True)
 
 ### Sensor Readings ###
 # First read the data CSV and name its columns
