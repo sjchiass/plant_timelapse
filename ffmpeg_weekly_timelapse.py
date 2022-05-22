@@ -37,9 +37,9 @@ for w in file_weeks.keys():
         shutil.copyfile("./captioned_images/"+f,
         "./weekly_images/"+f)
     os.system(
-    f"ffmpeg -n -r 24 -hide_banner -loglevel error "+    # fps + verbosity
+    f"ffmpeg -n -r 30 -hide_banner -loglevel error "+    # fps + verbosity
     f"-pattern_type glob -i './weekly_images/*.jpg' "+ # matching
     f"-vf yadif,format=yuv420p -c:v libx264 -preset slow -crf 18 "+
-    f"-pix_fmt yuv420p ./plant_videos/{w}.mkv") # video output
+    f"-pix_fmt yuv420p ./plant_videos/plant_week_{w}.mkv") # video output
     shutil.rmtree("./weekly_images")
 
