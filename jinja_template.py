@@ -1,3 +1,17 @@
+"""
+This script reads ./plant_stills and ./sensor_data so that it can 
+populate the template.html with jinja2.
+
+Usage: python ./jinja_template.py
+
+The script starts by finding images from the last 12 hours and only
+keeping one for each of these hours.
+
+The CSV with the sensor data is then read to create plotly charts, which
+are saved as JSON in the HTML page.
+
+Finally, all this data is fed through jinja2 to make the index.html.
+"""
 import jinja2
 import pandas as pd
 import os
@@ -12,7 +26,7 @@ from pathlib import Path
 
 Path("./public").mkdir(parents=True, exist_ok=True)
 
-### Image Filenames ###
+#%% Image Filenames
 # Get all filenames from the raw images' folder
 files = os.listdir("./plant_stills")
 
@@ -51,7 +65,7 @@ filenames = files_df.filename.tolist()
 for f in filenames:
   shutil.copyfile(f"./plant_stills/{f}", f"./public/{f}")
 
-### Sensor Data ###
+#%% Sensor Data
 # Read in data, add column headers, and set a datetime index
 sensors_df = pd.read_csv("./sensor_data/data.csv",
   header=0,
@@ -60,7 +74,7 @@ sensors_df["dt"] = pd.to_datetime(sensors_df.time)
 sensors_df = sensors_df.set_index("dt")
 sensors_df = sensors_df.sort_index()
 
-### Indicators ###
+#%% Indicators
 # Indicators are often used for KPIs, here we use them to summarise
 # changes in sensor readings in the past 6 hours
 # Determine the latest data and that of 6 hours ago
@@ -91,7 +105,7 @@ fig.update_layout(title="Sensor readings, compared to 6 hours ago",
 # Save the plot as a JSON string so that it can be used with plotly JS
 indicators_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-### Time series ###
+#%% Time series
 # Extract the last 24 hours
 last_24h = sensors_df.last("24h")
 
@@ -116,7 +130,7 @@ fig.update_layout(title="Sensor readings over past 24 hours",
 # Save the plot as a JSON string so that it can be used with plotly JS
 time_series_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-### Applying the template ###
+#%% Applying the template
 # Jinja lets us fill in spots of an html template file. This way various
 # information is put into the webpage
 index_template = (jinja2.Environment(
