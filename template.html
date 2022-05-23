@@ -97,7 +97,7 @@ Images and data are every 10 minutes. Updates to this website are pushed at 7AM,
   {% for item in images %}
   <div class="mySlides">
     <div class="numbertext">{{loop.index}} / {{loop.length}}</div>
-      <img src="./plant_stills/{{ item }}" style="width:100%">
+      <img src="./{{ item }}" style="width:100%">
   </div>
   {% endfor %}
 
@@ -110,7 +110,7 @@ Images and data are every 10 minutes. Updates to this website are pushed at 7AM,
   <div class="row">
   {% for item in images %}
     <div class="column">
-      <img class="demo cursor" src="./plant_stills/{{ item }}" style="width:100%" onclick="currentSlide({{loop.index}})" alt="{{item}}">
+      <img class="demo cursor" src="./{{ item }}" style="width:100%" onclick="currentSlide({{loop.index}})" alt="{{item}}">
     </div>
   {% endfor %}
   </div>
