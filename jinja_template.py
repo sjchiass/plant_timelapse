@@ -6,6 +6,7 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import json
 import os
+import shutil
 import re
 from pathlib import Path
 
@@ -38,6 +39,10 @@ files_df = files_df.groupby("hour").first().last("12h")
 
 # Get the image filenames into a list
 filenames = files_df.filename.tolist()
+
+# Copy these images for the website to display
+for f in filenames:
+  shutil.copyfile(f"./plant_stills/{f}", f"./public/{f}")
 
 ### Sensor Data ###
 sensors_df = pd.read_csv("./sensor_data/data.csv",
