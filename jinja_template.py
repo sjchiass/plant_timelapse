@@ -31,6 +31,9 @@ def extract_time(file, pattern):
 files_df = pd.DataFrame({"filename" : files,
                          "raw_time" : [extract_time(x, pattern) for x in files]})
 
+# Get the latest time
+latest_datetime = files_df.raw_time.tail(1).item()
+
 # Get the hour of each file
 files_df["hour"] = pd.to_datetime(files_df.raw_time).dt.floor("H")
 
@@ -94,7 +97,8 @@ index_template = (jinja2.Environment(
   loader=jinja2.FileSystemLoader("./")
   )
   .get_template("./template.html")
-  .render(images=filenames,
+  .render(latest_datetime=latest_datetime,
+          images=filenames,
           n_images=len(filenames),
           indicators=indicators_json,
           time_series=time_series_json)
