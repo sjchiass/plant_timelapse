@@ -1,29 +1,157 @@
-<html><head><body>
+<html>
+<head>
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+<!-- The slideshow code is from https://www.w3schools.com/howto/howto_js_slideshow.asp -->
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  vertical-align: middle;
+}
+
+/* Position the image container (needed to position the left and right arrows) */
+.container {
+  position: relative;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+  cursor: pointer;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* Container for image text */
+.caption-container {
+  text-align: center;
+  background-color: #222;
+  padding: 2px 16px;
+  color: white;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Six columns side by side */
+.column {
+  float: left;
+  width: 16.66%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+</style>
+
+</head>
+
+<body>
 <center>
 <h1>Welcome to the Catgrass Livecast!</h1><br>
-Images are every 10 minutes. Updates to this website are pushed at 7AM, noon and 5PM.<br>
+Images and data are every 10 minutes. Updates to this website are pushed at 7AM, noon and 5PM.<br>
 <hr><br>
 &#128049; VIDEO: <a href="https://youtu.be/_MneKYGGD3U">Week 1</a> &#128049;
 <hr><br>
-<a href="./plant_stills/{{last_capture}}"><img src="./plant_stills/{{last_capture}}" width=750px alt="Last image of growing plant"><br>
-Click image to see in full HD!</a><br>
+<div id="indicators" class="chart"></div>
+<script type="text/javascript">
+  Plotly.newPlot("indicators",{{indicators}},{});
+</script>
+<div id="time_series" class="chart"></div>
+<script type="text/javascript">
+  Plotly.newPlot("time_series",{{time_series}},{});
+</script>
 <hr><br>
-Sensor readings at {{time}}<br>
-<ul>
-<li>Soil moisture: {{soil}}%</li>
-<li>Humidity: {{humidity}}%</li>
-<li>Temperature: {{temperature}}C</li>
-</ul><br>
+<h2>Captures from last {{n_images}} hours</h2>
+<!-- Container for the image gallery -->
+<div class="container" style="width:50%">
+
+  <!-- Full-width images with number text -->
+  {% for item in images %}
+  <div class="mySlides">
+    <div class="numbertext">{{loop.index}} / {{loop.length}}</div>
+      <img src="./plant_stills/{{ item }}" style="width:100%">
+  </div>
+  {% endfor %}
+
+  <!-- Image text -->
+  <div class="caption-container">
+    <p id="caption"></p>
+  </div>
+  
+<!-- Thumbnail images -->
+  <div class="row">
+  {% for item in images %}
+    <div class="column">
+      <img class="demo cursor" src="./plant_stills/{{ item }}" style="width:100%" onclick="currentSlide({{loop.index}})" alt="{{item}}">
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+<script>
+let slideIndex = {{n_images}};
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("demo");
+  let captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+  captionText.innerHTML = dots[slideIndex-1].alt;
+}
+</script>
+
 <hr><br>
-Be sure to vote for the next feature!<br><br>
-<ul>
-<li>Timed lights instead of manual switch</li>
-<li>Water pump instead of hand-watering</li>
-<li>Automatic daily+weekly videos</li>
-</ul><br>
 ??? <a href="https://github.com/sjchiass/plant_timelapse">GitHub</a> ???
 <hr><br>
 <a href="https://raw.githubusercontent.com/sjchiass/website/master/content/posts/2021_w16_cat_faces/IMG_0245.JPG"><img src="https://raw.githubusercontent.com/sjchiass/catlendar/main/images/2021/09.jpg" width=500px alt="Looking forward to a great harvest this year!"><br>
 "I chew chew choose you, cat grass!"</a>
 </center>
-</body></head></html>
+</body>
+</html>

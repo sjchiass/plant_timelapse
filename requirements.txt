@@ -1,0 +1,4 @@
+plotly
+pyserial
+jinja2
+pandas
