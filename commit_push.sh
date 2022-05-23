@@ -1,6 +1,5 @@
 #!/bin/bash
-
-cd /home/pi/plant_repo
+cd "${0%/*}"
 
 git add ./plant_stills ./sensor_data
 
