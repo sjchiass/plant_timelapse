@@ -7,6 +7,9 @@ import plotly.graph_objects as go
 import json
 import os
 import re
+from pathlib import Path
+
+Path("./public").mkdir(parents=True, exist_ok=True)
 
 ### Image Filenames ###
 # Get all filenames from the raw images' folder
@@ -85,12 +88,12 @@ time_series_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 index_template = (jinja2.Environment(
   loader=jinja2.FileSystemLoader("./")
   )
-  .get_template("template.html")
+  .get_template("./template.html")
   .render(images=filenames,
           n_images=len(filenames),
           indicators=indicators_json,
           time_series=time_series_json)
   )
 
-with open("index.html", "w") as f:
+with open("./public/index.html", "w") as f:
   f.write(index_template)
