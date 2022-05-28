@@ -100,7 +100,8 @@ for n, (t, v) in enumerate(zip(variables, titles)):
 # Define the grid and make the indicators smaller
 fig.update_layout(title="Sensor readings, compared to 6 hours ago",
                   grid = {'rows': 1, 'columns': len(variables), 'pattern': "independent"},
-                  width=800, height=300)
+                  width=600, height=200,
+                  margin=dict(l=0, r=0, t=70, b=0))
 
 # Save the plot as a JSON string so that it can be used with plotly JS
 indicators_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
