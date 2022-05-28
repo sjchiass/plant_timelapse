@@ -100,23 +100,27 @@ for n, (t, v) in enumerate(zip(variables, titles)):
 # Define the grid and make the indicators smaller
 fig.update_layout(title="Sensor readings, compared to 6 hours ago",
                   grid = {'rows': 1, 'columns': len(variables), 'pattern': "independent"},
-                  width=800, height=300)
+                  width=600, height=200,
+                  margin=dict(l=0, r=0, t=70, b=0))
 
 # Save the plot as a JSON string so that it can be used with plotly JS
 indicators_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
 #%% Time series
-# Extract the last 24 hours
-last_24h = sensors_df.last("24h")
+# Extract the last 7 days
+last_7d = sensors_df.last("7d")
+
+# Average the hours
+last_7d = last_7d.resample("h").mean()
 
 # Specify that the graph will have a secondary axis
 # The main axis will be in % and the secondary axis degrees celsius
 fig = make_subplots(specs=[[{"secondary_y": True}]])
 
 # Add each trace
-fig.add_trace(go.Scatter(x=last_24h.index, y=last_24h.soil, name="Soil moisture"), secondary_y=False)
-fig.add_trace(go.Scatter(x=last_24h.index, y=last_24h.humidity, name="Humidity"), secondary_y=False)
-fig.add_trace(go.Scatter(x=last_24h.index, y=last_24h.temperature, name="Temperature"), secondary_y=True)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.soil, name="Soil moisture"), secondary_y=False)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.humidity, name="Humidity"), secondary_y=False)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.temperature, name="Temperature"), secondary_y=True)
 
 # Add axis titles and set decimal places
 fig.update_yaxes(title_text="Percentage", secondary_y=False, tickformat=".1f")
@@ -124,7 +128,7 @@ fig.update_yaxes(title_text="Celsius", secondary_y=True, tickformat=".1f")
 
 # Change the hovermode to "x unified" which hovers over all variables at
 # once. Also, use the "simple_white" theme that gets rid of all grid lines.
-fig.update_layout(title="Sensor readings over past 24 hours",
+fig.update_layout(title="Sensor readings over past 7 days",
                   hovermode="x unified", width=800, height=300, template="simple_white")
 
 # Save the plot as a JSON string so that it can be used with plotly JS
