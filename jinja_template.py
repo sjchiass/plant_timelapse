@@ -113,23 +113,23 @@ last_7d = sensors_df.last("7d")
 # Average the hours
 last_7d = last_7d.resample("h").mean()
 
-# Specify that the graph will have a secondary axis
-# The main axis will be in % and the secondary axis degrees celsius
-fig = make_subplots(specs=[[{"secondary_y": True}]])
+# Create a 3-row subplot
+fig = make_subplots(rows=3, cols=1,
+                    shared_xaxes=True,
+                    vertical_spacing=0.02)
 
 # Add each trace
-fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.soil, name="Soil moisture"), secondary_y=False)
-fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.humidity, name="Humidity"), secondary_y=False)
-fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.temperature, name="Temperature"), secondary_y=True)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.soil, name="Soil moisture"), row=1, col=1)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.humidity, name="Humidity"), row=2, col=1)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.temperature, name="Temperature"), row=3, col=1)
 
-# Add axis titles and set decimal places
-fig.update_yaxes(title_text="Percentage", secondary_y=False, tickformat=".1f")
-fig.update_yaxes(title_text="Celsius", secondary_y=True, tickformat=".1f")
+# Set decimal places
+fig.update_yaxes(tickformat=".1f")
 
 # Change the hovermode to "x unified" which hovers over all variables at
 # once. Also, use the "simple_white" theme that gets rid of all grid lines.
 fig.update_layout(title="Sensor readings over past 7 days",
-                  hovermode="x unified", width=800, height=300, template="simple_white")
+                  hovermode="x unified", width=800, height=400, template="simple_white")
 
 # Save the plot as a JSON string so that it can be used with plotly JS
 time_series_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
