@@ -124,12 +124,12 @@ fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.humidity, name="Humidity"), 
 fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.temperature, name="Temperature"), row=3, col=1)
 
 # Set decimal places
-fig.update_yaxes(tickformat=".1f")
+fig.update_yaxes(tickformat=".1f", showspikes=True)
 
 # Change the hovermode to "x unified" which hovers over all variables at
 # once. Also, use the "simple_white" theme that gets rid of all grid lines.
 fig.update_layout(title="Sensor readings over past 7 days",
-                  hovermode="x unified", width=800, height=400, template="simple_white")
+                  hovermode="x", width=800, height=500, template="simple_white")
 
 # Save the plot as a JSON string so that it can be used with plotly JS
 time_series_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
