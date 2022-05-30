@@ -76,10 +76,10 @@ sensors_df = sensors_df.sort_index()
 
 #%% Indicators
 # Indicators are often used for KPIs, here we use them to summarise
-# changes in sensor readings in the past 6 hours
-# Determine the latest data and that of 6 hours ago
+# changes in sensor readings in the past 24 hours
+# Determine the latest data and that of 24 hours ago
 latest = sensors_df.tail(1)
-previous = sensors_df.last("6h").head(1)
+previous = sensors_df.last("24h").head(1)
 
 fig = go.Figure()
 
@@ -92,13 +92,13 @@ for n, (t, v) in enumerate(zip(variables, titles)):
         title = t,
         value = latest[v].item(),
         mode = "number+delta",
-        delta = {'reference': previous[v].item()},
+        delta = {'reference': previous[v].item(), "valueformat": ".1f"},
         gauge = {
             'axis': {'visible': False}},
         domain = {'row': 0, 'column': n}))
 
 # Define the grid and make the indicators smaller
-fig.update_layout(title="Sensor readings, compared to 6 hours ago",
+fig.update_layout(title="Sensor readings, compared to a day ago",
                   grid = {'rows': 1, 'columns': len(variables), 'pattern': "independent"},
                   width=600, height=200,
                   margin=dict(l=0, r=0, t=70, b=0))
