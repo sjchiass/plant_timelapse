@@ -69,7 +69,7 @@ for f in filenames:
 # Read in data, add column headers, and set a datetime index
 sensors_df = pd.read_csv("./sensor_data/data.csv",
   header=0,
-  names=["time", "soil", "humidity", "temperature"])
+  names=["time", "light", "humidity", "temperature"])
 sensors_df["dt"] = pd.to_datetime(sensors_df.time)
 sensors_df = sensors_df.set_index("dt")
 sensors_df = sensors_df.sort_index()
@@ -85,8 +85,8 @@ fig = go.Figure()
 
 # For column, we want an indicator with a specific title
 # The enumerate is used to place each indicator in a column in the grid
-variables = ["Soil moisture", "Humidity", "Temperature"]
-titles = ["soil", "humidity", "temperature"]
+variables = ["Light level", "Humidity", "Temperature"]
+titles = ["light", "humidity", "temperature"]
 for n, (t, v) in enumerate(zip(variables, titles)):
     fig.add_trace(go.Indicator(
         title = t,
@@ -119,7 +119,7 @@ fig = make_subplots(rows=3, cols=1,
                     vertical_spacing=0.02)
 
 # Add each trace
-fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.soil, name="Soil moisture"), row=1, col=1)
+fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.light, name="Light level"), row=1, col=1)
 fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.humidity, name="Humidity"), row=2, col=1)
 fig.add_trace(go.Scatter(x=last_7d.index, y=last_7d.temperature, name="Temperature"), row=3, col=1)
 
