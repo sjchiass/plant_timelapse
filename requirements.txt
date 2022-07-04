@@ -2,3 +2,4 @@ plotly
 pyserial
 jinja2
 pandas
+pillow
